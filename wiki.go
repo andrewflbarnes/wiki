@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
     "io/ioutil"
     "net/http"
     "log"
+    "html/template"
 )
 
 type Page struct {
@@ -17,27 +17,42 @@ func (p *Page) save() error {
     return ioutil.WriteFile(fname, p.Body, 0600)
 }
 
-func load(title string) *Page {
+func load(title string) (*Page, error) {
     fname := title + ".txt"
-    body, _ := ioutil.ReadFile(fname)
-    return &Page{Title: title, Body: body}
+    body, e := ioutil.ReadFile(fname)
+    if e == nil {
+        return &Page{Title: title, Body: body}, e
+    } else {
+        return nil, e
+    }
+}
+
+func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
+    t, _ := template.ParseFiles(tmpl + ".html")
+    t.Execute(w, p)
 }
 
 func viewHandler(w http.ResponseWriter, r *http.Request) {
     title := r.URL.Path[len("/view/"):]
-    p := load(title)
-    fmt.Fprintf(w, "<h1>%s</h1><div>%s</div>", p.Title, string(p.Body))
+    p, err := load(title)
+    if err != nil {
+        http.Redirect(w, r, "/edit/" + title, http.StatusFound)
+        return
+    }
+    renderTemplate(w, "view", p)
 }
 
-func main_1() {
-    p1 := Page{Title: "TestPage", Body: []byte("This is an example page")}
-    p1.save()
-
-    p2 := load("TestPage")
-    fmt.Println(string(p2.Body))
+func editHandler(w http.ResponseWriter, r *http.Request) {
+    title := r.URL.Path[len("/edit/"):]
+    p, err := load(title)
+    if err != nil {
+        p = &Page{Title: title}
+    }
+    renderTemplate(w, "edit", p)
 }
 
 func main() {
     http.HandleFunc("/view/", viewHandler)
+    http.HandleFunc("/edit/", editHandler)
     log.Fatal(http.ListenAndServe(":9090", nil))
 }
