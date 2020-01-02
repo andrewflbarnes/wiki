@@ -8,7 +8,7 @@ import (
     "regexp"
 )
 
-var templates = template.Must(template.ParseFiles("view.html", "edit.html"))
+var templates = template.Must(template.ParseGlob("tmpl/*"))
 var validPath = regexp.MustCompile("^/(edit|view|save)/([0-9a-zA-Z]+)$")
 
 type Page struct {
