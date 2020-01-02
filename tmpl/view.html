@@ -1,12 +1,29 @@
 <html>
-    <head>
-        <title>{{.Title}}</title>
-    </head>
-    <body>
-        <h1>{{.Title}}</h1>
-
-        <p><a href="/edit/{{.Title}}">edit</a>
-
-        <div>{{.Body}}</div>
-    </body>
+<head>
+  <title>{{.Title}}</title>
+  <link href='https://fonts.googleapis.com/css?family=Verdana' rel='stylesheet'>
+  <style>
+    body {
+      font-family: 'Verdana';font-size: 22px;
+    }
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    .footer-content {
+      padding: 0 0 0 1em
+    }
+  </style>
+</head>
+<body>
+  <h1>{{.Title}}</h1>
+  <div>{{.Body}}</div>
+  <div class="footer">
+    <p class="footer-content">
+      <a href="/edit/{{.Title}}">Edit</a> this page
+    </p>
+  </div>
+</body>
 </html>

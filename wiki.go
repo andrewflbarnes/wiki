@@ -91,7 +91,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string) {
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-    http.Redirect(w, r, "/view/home", http.StatusFound)
+    http.Redirect(w, r, "/view/Home", http.StatusFound)
 }
 
 func main() {
