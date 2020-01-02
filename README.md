@@ -13,7 +13,7 @@ go build
 ./wiki
 ```
 
-To verify go to `localhost:9090/view/test` either in browser or using `curl`/`wget`/etc.
+To verify go to `localhost:9090` either in browser or using `curl`/`wget`/etc.
 
 ## Operations
 
